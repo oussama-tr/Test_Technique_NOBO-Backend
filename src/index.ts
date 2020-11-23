@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as bodyParser from "body-parser";
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import * as appConfig from "./common/app-config";
@@ -11,6 +12,7 @@ import routes from "./routes";
 const app = express();
 
 app.use(express.static('public'));
+app.use(bodyParser.json());
 
 /**
  * Express configuration.

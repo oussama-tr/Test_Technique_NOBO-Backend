@@ -29,7 +29,7 @@ export class UserEntity {
     email: string;
 
     @Column({
-        length: 30
+        length: 100
     })
     password: string;
 

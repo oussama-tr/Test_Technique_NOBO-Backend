@@ -7,7 +7,7 @@ class UserController{
 
     static newUser = async (req: Request, res: Response) => {
       //Get parameters from the body
-
+      
       let { firstname, lastname, email, password, role } = req.body;
       let user = new UserEntity();
       user.firstname = firstname;
