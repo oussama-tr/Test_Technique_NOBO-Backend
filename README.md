@@ -1,1 +1,2 @@
-# Test_Technique_NOBO-Backend
+# -Back-end-NOBO
+Back end for NOBO Mobile application (Technical Test) , developed using NodeJs, ExpressJs and typescript
