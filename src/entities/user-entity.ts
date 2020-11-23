@@ -1,5 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, Unique } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, Unique, OneToMany } from "typeorm";
 import * as bcrypt from "bcryptjs";
+import { ServiceEntity } from './service-entity';
+import { RatingEntity } from './rating-entity';
 
 export enum UserRole {
     CUSTOMER = "customer",
@@ -29,12 +31,22 @@ export class UserEntity {
     email: string;
 
     @Column({
-        length: 100
+        length: 100,
+        select: false,
     })
     password: string;
 
     @Column()
     role: UserRole;
+
+    @OneToMany(type => ServiceEntity, service => service.customers ,{ onDelete: 'CASCADE' })
+    usedServices: ServiceEntity[];
+
+    @OneToMany(type => ServiceEntity, service => service.provider ,{ onDelete: 'CASCADE' })
+    providedServices: ServiceEntity[];
+
+    @OneToMany(type => RatingEntity, rating => rating.customer ,{ onDelete: 'CASCADE' })
+    ratings: RatingEntity[];
 
     @BeforeInsert()
     async hashPassword() {
