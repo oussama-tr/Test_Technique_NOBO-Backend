@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 import { UserEntity } from "../entities/user-entity";
- 
+import * as jwt from "jsonwebtoken";
+import config from "../common/jwt-config";
+
 class UserController{
 
     static newUser = async (req: Request, res: Response) => {
@@ -31,9 +33,16 @@ class UserController{
         res.status(409).send(e);
         return;
       }
+
+      //Sing JWT, valid for 1 hour
+      const token = jwt.sign(
+        { userId: user.id, userEmail: user.email },
+        config.jwtSecret,
+        { expiresIn: "1h" }
+      );
     
       //If all ok, send 201 response
-      res.status(200).send({user: user});
+      res.status(201).send({user: user, token: token});
     };
 }
     
