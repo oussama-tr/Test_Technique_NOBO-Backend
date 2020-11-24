@@ -38,7 +38,7 @@ export class UserEntity {
     @Column()
     role: UserRole;
 
-    @OneToMany(type => ServiceEntity, service => service.customers ,{ onDelete: 'CASCADE' })
+    @OneToMany(type => ServiceEntity, service => service.customer ,{ onDelete: 'CASCADE' })
     usedServices: ServiceEntity[];
 
     @OneToMany(type => ServiceEntity, service => service.provider ,{ onDelete: 'CASCADE' })

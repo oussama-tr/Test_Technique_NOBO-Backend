@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, ManyToMany, JoinTable, OneToMany} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, JoinTable, OneToMany} from "typeorm";
 import { UserEntity } from './user-entity';
 import { AddressEntity } from './address-entity';
 import { RatingEntity } from './rating-entity';
@@ -20,9 +20,9 @@ export class ServiceEntity {
     @JoinColumn()
     address: AddressEntity;
 
-    @ManyToMany(type => UserEntity, customer => customer.usedServices ,{ onDelete: 'CASCADE' })
+    @ManyToOne(type => UserEntity, customer => customer.usedServices ,{ onDelete: 'CASCADE' })
     @JoinTable()
-    customers: UserEntity[];
+    customer: UserEntity[];
 
     @ManyToOne(type => UserEntity, customer => customer.providedServices ,{ onDelete: 'CASCADE' })
     provider: UserEntity;

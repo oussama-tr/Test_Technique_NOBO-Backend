@@ -54,7 +54,7 @@ class ServiceController{
       const serviceRepository = getRepository(ServiceEntity);
 
       try{
-      let services = await serviceRepository.find({ relations: ['ratings', 'address', 'customers', 'provider'] });
+      let services = await serviceRepository.find({ relations: ['ratings', 'address', 'customer', 'provider'] });
       res.send(services);
       }
       catch(error)
@@ -63,6 +63,63 @@ class ServiceController{
         return;
       }    
     };
+
+    static getAllServicesForUser = async (req: Request, res: Response) => {
+      
+      const id = req.params.id;
+      const serviceRepository = getRepository(ServiceEntity);
+      const userRepository = getRepository(UserEntity);
+
+      let user : UserEntity;
+      try{
+        user = await userRepository.findOneOrFail(id);
+        }
+        catch(error)
+        {
+          res.status(404).send();
+          return;
+        }    
+
+      try{
+        let services = await serviceRepository.find({ where: { customer: user }, relations: ['ratings', 'address', 'customer', 'provider'] });  
+            res.send(services);
+      }
+      catch(error)
+      {
+        res.status(404).send();
+        return;
+      }    
+    };
+
+    static cancelService = async (req: Request, res: Response) => {
+      
+      const id = req.params.id;
+      const serviceRepository = getRepository(ServiceEntity);
+      
+      let service;
+      
+      try{
+        service = await serviceRepository.findOneOrFail(id);  
+      }
+      catch(error)
+      {
+        res.status(404).send();
+        return;
+      }   
+      
+      service.canceled = true;
+
+      try {
+        await serviceRepository.save(service);
+        res.status(204).send();
+      } catch (e) {
+        res.status(409).send(e);
+        return;
+      }
+    
+    };
+
+    
 
     static rateService = async (req: Request, res: Response) => {
 
